@@ -2,7 +2,6 @@ package com.frost2.skeleton.controller.thread;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2020-10-29 10:10:35
  */
 @RestController
-@Api(tags = "单例的Controller")
+@Api(tags = "SingletonController")
 @RequestMapping(value = "/thread")
 public class SingletonController {
 
@@ -29,7 +28,7 @@ public class SingletonController {
     @GetMapping(value = "/singleton")
     public String testVar() {
         System.out.println("var++ = " + var++);
-        return String.valueOf(var);
+        return String.valueOf(this.hashCode() + ":" + var);
     }
 
 }

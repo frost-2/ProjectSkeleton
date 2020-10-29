@@ -7,6 +7,7 @@ import sun.misc.BASE64Encoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * 加密工具类
@@ -64,6 +65,26 @@ public class EncryptionUtils {
         } catch (Exception e) {
             throw new CustomException(Code.FAILED, "SHA1加密出现异常");
         }
+    }
+
+    /**
+     * base64编码
+     *
+     * @param string 字符串
+     * @return 编码后的字符串
+     */
+    public static String base64Encode(String string) {
+        return Base64.getEncoder().encodeToString(string.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * base64解码
+     *
+     * @param encode base64编码后的字符串
+     * @return 解码后的字符串
+     */
+    public static String base64Decode(String encode) {
+        return new String(Base64.getDecoder().decode(encode), StandardCharsets.UTF_8);
     }
 
 }
