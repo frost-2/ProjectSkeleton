@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="log_home" value="/home/joker/javaApi/quartz/log"/>
+    <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{0}: %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${log_pattern}</pattern>
+        </layout>
+    </appender>
+
+    <appender name="MigrateUsedList" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_home}/usedList/usedList.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_home}/usedList/usedList-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <MaxHistory>180</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${log_pattern}</pattern>
+        </layout>
+    </appender>
+    <appender name="MigrateBuy" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_home}/buy/buy.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_home}/buy/buy-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <MaxHistory>180</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${log_pattern}</pattern>
+        </layout>
+    </appender>
+    <appender name="MigrateWxPay" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_home}/wxPay/wxPay.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_home}/wxPay/wxPay-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <MaxHistory>180</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${log_pattern}</pattern>
+        </layout>
+    </appender>
+
+
+    <logger name="com.frost2.quartz.service.impl.MigrateUsedList" additivity="false">
+        <appender-ref ref="MigrateUsedList"/>
+    </logger>
+    <logger name="com.frost2.quartz.service.impl.MigrateBuy" additivity="false">
+        <appender-ref ref="MigrateBuy"/>
+    </logger>
+    <logger name="com.frost2.quartz.service.impl.MigrateWxPay" additivity="false">
+        <appender-ref ref="MigrateWxPay"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

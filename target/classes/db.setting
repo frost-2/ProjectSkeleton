@@ -1,0 +1,16 @@
+## db.setting文件
+
+[gicl]
+url = jdbc:mysql://117.50.48.85:3306/gicl?allowMultiQueries=true&useUnicode=true&serverTimezone=UTC&characterEncoding=utf8
+user = xjkc002
+pass = xjkc@002
+
+[piles]
+url = jdbc:mysql://117.50.48.85:3306/piles?allowMultiQueries=true&useUnicode=true&serverTimezone=UTC&characterEncoding=utf8
+user = xjkc002
+pass = xjkc@002
+
+[xjBak]
+url = jdbc:mysql://117.50.48.85:3306/xiaoJi_bak?allowMultiQueries=true&useUnicode=true&serverTimezone=UTC&characterEncoding=utf8
+user = xjkc002
+pass = xjkc@002
