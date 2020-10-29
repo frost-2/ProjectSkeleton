@@ -1,0 +1,2 @@
+# ProjectSkeleton
+本项目为基于springboot搭建的项目骨架
