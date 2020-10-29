@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frost2.multiresource.mapper.business.QueryMeterCheckMapper">
+
+
+    <select id="queryFeeBySiteIDAndTime" resultType="java.lang.Double">
+        select MAX(fee) from meter_check WHERE siteID=#{siteID} and InsertTime=#{time};
+    </select>
+</mapper>
