@@ -6,6 +6,7 @@ import com.frost2.skeleton.common.bean.Result;
 import com.frost2.skeleton.common.util.QuartzUtil;
 import com.frost2.skeleton.service.*;
 import com.frost2.skeleton.service.factory.MigrateDbJobFactory;
+import org.quartz.Job;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -148,16 +149,15 @@ public class TimedTaskServiceImpl implements ITimedTaskService, IMigrateUsedList
      * 如果后续的迁移逻辑变复杂，他的sql不像MigrateDb中那么简单时，就会有类似于MigrateDb的其他类，此时{@link MigrateDbJobFactory}中的build方法将会明显的体现出工厂模式。
      * <p>
      *
-     * @problem 这种方式存在很大的问题，每次创建的任务都包括之前所有的任务，并且重复执行，因为保存任务信息的map的static的，还需要解决。
-     * @update 2020-11-2 解决问题problem
-     * @update 2020-11-2 增加数据迁移实例,修改工厂类
-     *
      * @param cron          cron表达式
      * @param originalTable 原始数据表
      * @param migrateDay    数据迁移边界
      * @param timeColumn    时间字段,根据其判断将过去多久的数据进行迁移
      * @param backupTable   备份数据表
      * @param primaryKey    原始数据表主键
+     * @problem 这种方式存在很大的问题，每次创建的任务都包括之前所有的任务，并且重复执行，因为保存任务信息的map的static的，还需要解决。
+     * @update 2020-11-2 解决问题problem
+     * @update 2020-11-2 增加数据迁移实例,修改工厂类
      * @see MigrateDb 数据迁移
      * @see MigrateDbJobFactory 数据迁移工厂类
      */
@@ -168,20 +168,54 @@ public class TimedTaskServiceImpl implements ITimedTaskService, IMigrateUsedList
         }
         String description = "将表[" + originalTable + "]" + migrateDay + "天以前的数据迁移到[" + backupTable + "]";
 
-        MigrateDb migrateDb = new MigrateDbJobFactory()
+        Class<? extends Job> clazz = new MigrateDbJobFactory()
                 .setOriginalTable(originalTable)
                 .setBackupTable(backupTable)
                 .setMigrateDay(migrateDay)
                 .setTimeColumn(timeColumn)
                 .setPrimaryKey(primaryKey)
                 .build();
+
+        switch (originalTable) {
+            case Constant.WXPAY:
+                return startMigrateWxPay(description, clazz, cron);
+            default:
+                return startMigrateDb(description, clazz, cron);
+
+        }
+
+    }
+
+    /**
+     * 创建预订单定时抄表任务
+     *
+     * @param description 描述
+     * @param clazz       任务类
+     * @param cron        cron表达式
+     */
+    private Result startMigrateWxPay(String description, Class<? extends Job> clazz, String cron) {
+        boolean isStart = QuartzUtil.addJob(Constant.JOB_MIGRATE_WXPAY, Constant.TRIGGER_MIGRATE_WXPAY, description, clazz, cron);
+        if (isStart) {
+            return Result.succ();
+        }
+        return Result.failed("数据迁移定时任务启动失败");
+    }
+
+    /**
+     * 创建定时抄表任务，这种方式的要求比较宽:将一段时间以前的数据从一个表移到另一个表都可以用这个方法.
+     *
+     * @param description 描述
+     * @param clazz       任务类
+     * @param cron        cron表达式
+     */
+    private Result startMigrateDb(String description, Class<? extends Job> clazz, String cron) {
         //对注释中@problem的解决办法
         if (MigrateDb.map.size() == 1) {
-            boolean isStart = QuartzUtil.addJob(Constant.JOB_NAME, Constant.TRIGGER_NAME, description, migrateDb.getClass(), cron);
+            boolean isStart = QuartzUtil.addJob(Constant.JOB_MIGRATE_DB, Constant.TRIGGER_MIGRATE_DB, description, clazz, cron);
             if (isStart) {
                 return Result.succ();
             }
-            return Result.failed("迁移预订单定时任务启动失败");
+            return Result.failed("数据迁移定时任务启动失败");
         } else {
             return Result.succ();
         }

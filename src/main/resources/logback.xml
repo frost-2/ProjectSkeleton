@@ -49,16 +49,32 @@
             <pattern>${log_pattern}</pattern>
         </layout>
     </appender>
+    <appender name="MigrateDb" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_home}/migrateDb/migrateDb.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_home}/migrateDb/migrateDb-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <MaxHistory>180</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${log_pattern}</pattern>
+        </layout>
+    </appender>
 
 
-    <logger name="com.frost2.quartz.service.impl.MigrateUsedList" additivity="false">
+    <logger name="com.frost2.skeleton.service.impl.MigrateUsedList" additivity="false">
         <appender-ref ref="MigrateUsedList"/>
     </logger>
-    <logger name="com.frost2.quartz.service.impl.MigrateBuy" additivity="false">
+    <logger name="com.frost2.skeleton.service.impl.MigrateBuy" additivity="false">
         <appender-ref ref="MigrateBuy"/>
     </logger>
-    <logger name="com.frost2.quartz.service.impl.MigrateWxPay" additivity="false">
+    <logger name="com.frost2.skeleton.service.impl.MigrateWxPay" additivity="false">
         <appender-ref ref="MigrateWxPay"/>
+    </logger>
+    <logger name="com.frost2.skeleton.service.impl.MigrateDb" additivity="false">
+        <appender-ref ref="MigrateDb"/>
     </logger>
 
     <root level="info">

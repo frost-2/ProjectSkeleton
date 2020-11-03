@@ -6,15 +6,22 @@ package com.frost2.skeleton.common.bean;
  */
 public class Constant {
 
-    private Constant(){}
+    private Constant() {
+    }
 
     //数据迁移边界
     public static int MIGRATE_USEDLIST = 90;
     public static int MIGRATE_BUY = 500;
     public static int MIGRATE_WXPAY = 30;
+
     //数据迁移任务名称、触发器名称
-    public static final String JOB_NAME = "job_migrateDb";
-    public static final String TRIGGER_NAME = "trigger_migrateDb";
+    public static final String JOB_MIGRATE_DB = "job_migrateDb";
+    public static final String TRIGGER_MIGRATE_DB = "trigger_migrateDb";
+    public static final String JOB_MIGRATE_WXPAY = "job_migrateWxPay";
+    public static final String TRIGGER_MIGRATE_WXPAY = "trigger_migrateWxPay";
+
+    //迁移数据表标识,用来判断迁移那种表
+    public static final String WXPAY = "wxPay";
 
     //db.setting中数据源标志
     public static String GICL = "gicl";
