@@ -1,10 +1,7 @@
 package com.frost2.skeleton.controller;
 
 import com.frost2.skeleton.common.bean.Result;
-import com.frost2.skeleton.service.IMigrateBuy;
-import com.frost2.skeleton.service.IMigrateUsedList;
-import com.frost2.skeleton.service.IMigrateWxPay;
-import com.frost2.skeleton.service.ITimedTaskService;
+import com.frost2.skeleton.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,28 +24,41 @@ public class TimedTaskController {
     IMigrateBuy migrateBuyImpl;
     @Autowired
     IMigrateWxPay migrateWxPayImpl;
+    @Autowired
+    IMigrateDb migrateDbImpl;
+
+    @ApiOperation(value = "迁移数据", httpMethod = "POST")
+    @PostMapping(value = "/migrate/db")
+    public Result migrateDb(@RequestParam String cron,
+                            @RequestParam String originalTable,
+                            @RequestParam String migrateDay,
+                            @RequestParam String timeColumn,
+                            @RequestParam String backupTable,
+                            @RequestParam String primaryKey) {
+        return migrateDbImpl.migrateDb(cron, originalTable, migrateDay, timeColumn, backupTable, primaryKey);
+    }
 
     @ApiOperation(value = "迁移历史订单数据", httpMethod = "POST")
     @PostMapping(value = "/migrate/usedList")
     public Result migrateUsedList(@RequestParam String jobName,
-                                      @RequestParam String triggerName,
-                                      @RequestParam String cron) {
+                                  @RequestParam String triggerName,
+                                  @RequestParam String cron) {
         return migrateUsedListImpl.migrateUsedList(jobName, triggerName, cron);
     }
 
     @ApiOperation(value = "迁移充值订单数据", httpMethod = "POST")
     @PostMapping(value = "/migrate/buy")
     public Result migrateBuy(@RequestParam String jobName,
-                                 @RequestParam String triggerName,
-                                 @RequestParam String cron) {
+                             @RequestParam String triggerName,
+                             @RequestParam String cron) {
         return migrateBuyImpl.migrateBuy(jobName, triggerName, cron);
     }
 
     @ApiOperation(value = "迁移预订单数据", httpMethod = "POST")
     @PostMapping(value = "/migrate/wxPay")
     public Result migrateWxPay(@RequestParam String jobName,
-                                 @RequestParam String triggerName,
-                                 @RequestParam String cron) {
+                               @RequestParam String triggerName,
+                               @RequestParam String cron) {
         return migrateWxPayImpl.migrateWxPay(jobName, triggerName, cron);
     }
 

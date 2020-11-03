@@ -12,6 +12,9 @@ public class Constant {
     public static int MIGRATE_USEDLIST = 90;
     public static int MIGRATE_BUY = 500;
     public static int MIGRATE_WXPAY = 30;
+    //数据迁移任务名称、触发器名称
+    public static final String JOB_NAME = "job_migrateDb";
+    public static final String TRIGGER_NAME = "trigger_migrateDb";
 
     //db.setting中数据源标志
     public static String GICL = "gicl";
